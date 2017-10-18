@@ -1,0 +1,6 @@
+framework module Pods_taskList_projectFile {
+  umbrella header "Pods-taskList-projectFile-umbrella.h"
+
+  export *
+  module * { export * }
+}

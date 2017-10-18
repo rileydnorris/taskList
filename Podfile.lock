@@ -1,0 +1,15 @@
+PODS:
+  - IQKeyboardManagerSwift (4.0.10)
+  - TextFieldEffects (1.3.3)
+
+DEPENDENCIES:
+  - IQKeyboardManagerSwift
+  - TextFieldEffects
+
+SPEC CHECKSUMS:
+  IQKeyboardManagerSwift: 75ba21a23794a1e6b6fe6d9a267ea17f80e06771
+  TextFieldEffects: 8706f53525f1ce51c8921b7af32237caab50c467
+
+PODFILE CHECKSUM: ec767a0eb55c86d3f4a886321ae3d876ad0edd9a
+
+COCOAPODS: 1.2.1
