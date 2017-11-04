@@ -60,7 +60,7 @@ class sideBarTableViewController: UITableViewController {
                 //today cell
             if indexPath.row == 1 {
                 
-                cell.iconImageView.image = UIImage(named: "todayIcon")
+                cell.iconImageView.image = #imageLiteral(resourceName: "todayIcon ")
                 cell.cellLabel.text = "Your day"
                 titleArray.append("Your Day")
                 cell.taskCount.text = "\(todayCount)"
@@ -68,7 +68,7 @@ class sideBarTableViewController: UITableViewController {
                 //this week cell
             } else if indexPath.row == 2 {
                 
-                cell.iconImageView.image = UIImage(named: "thisWeekIcon")
+                cell.iconImageView.image = #imageLiteral(resourceName: "thisWeekIcon ")
                 cell.cellLabel.text = "Your week"
                 titleArray.append("Your Week")
                 cell.taskCount.text = "\(weekCount)"
@@ -76,14 +76,14 @@ class sideBarTableViewController: UITableViewController {
                 //all tasks cell
             } else if indexPath.row == 3 {
                 
-                cell.iconImageView.image = UIImage(named: "allTasksIcon")
+                cell.iconImageView.image = #imageLiteral(resourceName: "allTasksIcon ")
                 cell.cellLabel.text = "All tasks"
                 titleArray.append("All Tasks")
                 cell.taskCount.text = "\(taskClass.count)"
                 
             } else if indexPath.row == 4 {
                 
-                cell.iconImageView.image = UIImage(named: "projectIcon")
+                cell.iconImageView.image = #imageLiteral(resourceName: "projectIcon ")
                 cell.cellLabel.text = "General"
                 titleArray.append("General")
                 cell.taskCount.text = "\(generalCount)"
@@ -93,7 +93,7 @@ class sideBarTableViewController: UITableViewController {
                 
                 let index = indexPath.row - 5
                 
-                cell.iconImageView.image = UIImage(named: "projectIcon")
+                cell.iconImageView.image = #imageLiteral(resourceName: "projectIcon ")
                 cell.cellLabel.text = projects[index].projectName
                 titleArray.append(projects[index].projectName!)
                 cell.taskCount.text = "\(projectCounts[index])"
@@ -120,7 +120,7 @@ class sideBarTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
-            return 71
+            return 60 //71
         } else {
             return 55
         }
@@ -129,7 +129,7 @@ class sideBarTableViewController: UITableViewController {
     
     
     //function to reload tableVIew
-    func loadList(notification: NSNotification) {
+    @objc func loadList(notification: NSNotification) {
         tableView.reloadData()
     }
 

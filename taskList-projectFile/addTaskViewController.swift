@@ -46,7 +46,12 @@ class addTaskViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         self.notesTextView.delegate = self;
         
         //setting some text
-        notesTextView.text = "Write down some notes, whether it be important information or just some general reminders you might forget. Don't worry, we don't judge."
+        let defaultNote = "Write down some notes, whether it be important information or just some general reminders."
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 10
+        let attributes = [NSAttributedStringKey.paragraphStyle : style]
+        notesTextView.attributedText = NSAttributedString(string: defaultNote, attributes: attributes)
+        notesTextView.font = UIFont.systemFont(ofSize: 15, weight: .light)
         notesTextView.textColor = UIColor.lightGray
         taskNameTextField.text = taskNamePassed
         dueDateTextField.text = dueDatePassed
@@ -141,6 +146,7 @@ class addTaskViewController: UIViewController, UITextFieldDelegate, UITextViewDe
             task.taskProject = projectTextField.text!
             task.taskProjectSection = projectSectionTextField.text!
             task.taskDueDate = dueDateTextField.text!
+            task.taskDueDateObject = datePicker.date
             task.taskNotes = notesTextView.text!
             task.taskIsRemind = remindSwitch.isOn
             task.isChecked = false
@@ -212,6 +218,8 @@ class addTaskViewController: UIViewController, UITextFieldDelegate, UITextViewDe
         
         if item == 1 {
             projectTextField.inputAccessoryView = toolBar
+            taskNameTextField.inputAccessoryView = toolBar
+            notesTextView.inputAccessoryView = toolBar
         } else if item == 2 {
             projectSectionTextField.inputAccessoryView = toolBar
         } else {
@@ -222,14 +230,14 @@ class addTaskViewController: UIViewController, UITextFieldDelegate, UITextViewDe
     
     
     //dismiss any keyboard
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
     
     
     //dismiss the date picker
-    func dismissDateKeyboard() {
+    @objc func dismissDateKeyboard() {
         view.endEditing(true)
         
         let dateFormatter = DateFormatter()

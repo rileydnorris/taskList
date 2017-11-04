@@ -37,7 +37,7 @@ class ProjectEditorTableViewController: UITableViewController {
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Avenir Next", size: 18)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font: UIFont(name: "Avenir Next", size: 18)!]
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
         
         self.navigationItem.title = "Edit Projects"
@@ -63,6 +63,22 @@ class ProjectEditorTableViewController: UITableViewController {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "addProject", for: indexPath) as! AddProjectEditorTableViewCell
             
+            let toolBar = UIToolbar()
+            toolBar.sizeToFit()
+            var doneButton = UIBarButtonItem()
+            
+            let flexButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+            
+            doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
+            
+            toolBar.setItems([flexButton,doneButton], animated: false)
+            toolBar.isUserInteractionEnabled = true
+            
+            toolBar.barTintColor = UIColor.white
+            toolBar.tintColor = UIColor.darkGray
+            
+            cell.projectNameTextField.inputAccessoryView = toolBar
+            
             //cell customization
             cell.selectionStyle = .none
             
@@ -75,7 +91,7 @@ class ProjectEditorTableViewController: UITableViewController {
                 
             let index = indexPath.row - 1
                 
-            cell.projectIcon.image = UIImage(named: "projectIcon")
+            cell.projectIcon.image = #imageLiteral(resourceName: "projectIcon ")
             cell.projectName.text = projects[index].projectName
             cell.projectCount.text = "\(projectCounts[index])"
             
@@ -135,8 +151,14 @@ class ProjectEditorTableViewController: UITableViewController {
     
     
     
-    func loadList() {
+    @objc func loadList() {
         tableView.reloadData()
+    }
+    
+    
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     

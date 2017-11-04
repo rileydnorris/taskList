@@ -63,7 +63,12 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
         remindSwitch.isOn = remindIsOn
         
         if notes == "" {
-            notesTextView.text = "Write down some notes, whether it be important information or just some general reminders you might forget. Don't worry, we don't judge."
+            let defaultNote = "Write down some notes, whether it be important information or just some general reminders."
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = 10
+            let attributes = [NSAttributedStringKey.paragraphStyle : style]
+            notesTextView.attributedText = NSAttributedString(string: defaultNote, attributes: attributes)
+            notesTextView.font = UIFont.systemFont(ofSize: 15, weight: .light)
             notesTextView.textColor = UIColor.lightGray
         } else {
             notesTextView.text = notes
@@ -71,18 +76,18 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         //setting values for buttons on top
         if taskClass[usedArray[classIndex].todayItemIndex].isChecked {
-            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED"), for: UIControlState.normal)
+            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED "), for: UIControlState.normal)
             isChecked = true
         } else {
-            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE"), for: UIControlState.normal)
+            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE "), for: UIControlState.normal)
             isChecked = false
         }
         
         if taskClass[usedArray[classIndex].todayItemIndex].isStarred {
-            starOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected"), for: UIControlState.normal)
+            starOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected "), for: UIControlState.normal)
             isStarred = true
         } else {
-            starOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected"), for: UIControlState.normal)
+            starOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected "), for: UIControlState.normal)
             isStarred = false
         }
         
@@ -127,7 +132,7 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if notesTextView.text.isEmpty {
-            notesTextView.text = "Write down some notes, whether it be important information or just some reminders. Don't worry, we don't judge."
+            notesTextView.text = "Write down some notes, whether it be important information or just some reminders."
             notesTextView.textColor = UIColor.lightGray
         }
     }
@@ -159,36 +164,38 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     //make change to the task and dismiss view
     @IBAction func editTaskButtonAction(_ sender: Any) {
-        
-        //setting project and project section if nothing is selected
-        if projectTextField.text == "" {
-            projectTextField.text = "General"
+        if taskNameTextField.text != "" {
+            //setting project and project section if nothing is selected
+            if projectTextField.text == "" {
+                projectTextField.text = "General"
+            }
+            if projectSectionTextField.text == "" {
+                projectSectionTextField.text = "General"
+            }
+            
+            //setting up coreData
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            //updating values
+            taskClass[usedArray[classIndex].todayItemIndex].taskName = taskNameTextField.text!
+            taskClass[usedArray[classIndex].todayItemIndex].taskProject = projectTextField.text!
+            taskClass[usedArray[classIndex].todayItemIndex].taskProjectSection = projectSectionTextField.text!
+            taskClass[usedArray[classIndex].todayItemIndex].taskDueDate = dueDateTextField.text!
+            taskClass[usedArray[classIndex].todayItemIndex].taskDueDateObject = datePicker.date
+            taskClass[usedArray[classIndex].todayItemIndex].taskNotes = notesTextView.text!
+            taskClass[usedArray[classIndex].todayItemIndex].taskIsRemind = remindSwitch.isOn
+            taskClass[usedArray[classIndex].todayItemIndex].isChecked = isChecked
+            taskClass[usedArray[classIndex].todayItemIndex].isStarred = isStarred
+            
+            //saving updated values to coreData
+            appDelegate.saveContext()
+            
+            //reloading the tableView in ViewController
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
+            
+            //dismiss view
+            dismiss(animated: true, completion: nil)
         }
-        if projectSectionTextField.text == "" {
-            projectSectionTextField.text = "General"
-        }
-        
-        //setting up coreData
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
-        //updating values
-        taskClass[usedArray[classIndex].todayItemIndex].taskName = taskNameTextField.text!
-        taskClass[usedArray[classIndex].todayItemIndex].taskProject = projectTextField.text!
-        taskClass[usedArray[classIndex].todayItemIndex].taskProjectSection = projectSectionTextField.text!
-        taskClass[usedArray[classIndex].todayItemIndex].taskDueDate = dueDateTextField.text!
-        taskClass[usedArray[classIndex].todayItemIndex].taskNotes = notesTextView.text!
-        taskClass[usedArray[classIndex].todayItemIndex].taskIsRemind = remindSwitch.isOn
-        taskClass[usedArray[classIndex].todayItemIndex].isChecked = isChecked
-        taskClass[usedArray[classIndex].todayItemIndex].isStarred = isStarred
-        
-        //saving updated values to coreData
-        appDelegate.saveContext()
-        
-        //reloading the tableView in ViewController
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
-        
-        //dismiss view
-        dismiss(animated: true, completion: nil)
     }
 
 
@@ -221,6 +228,8 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
         toolBar.sizeToFit()
         var doneButton = UIBarButtonItem()
         
+        let flexButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        
         //if the toolbar is for the date picker we need a different function to be called
         if item == 3 {
             doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(viewTaskViewController.dismissDateKeyboard))
@@ -228,7 +237,7 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
             doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(viewTaskViewController.dismissKeyboard))
         }
         
-        toolBar.setItems([doneButton], animated: false)
+        toolBar.setItems([flexButton,doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         
         toolBar.barTintColor = UIColor.white
@@ -236,6 +245,8 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
         
         if item == 1 {
             projectTextField.inputAccessoryView = toolBar
+            taskNameTextField.inputAccessoryView = toolBar
+            notesTextView.inputAccessoryView = toolBar
         } else if item == 2 {
             projectSectionTextField.inputAccessoryView = toolBar
         } else {
@@ -246,14 +257,14 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
     
     
     //dimiss any keyboard
-    func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
     
     
     
     //dimiss the date picker
-    func dismissDateKeyboard() {
+    @objc func dismissDateKeyboard() {
         view.endEditing(true)
         
         let dateFormatter = DateFormatter()
@@ -268,10 +279,10 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //action for the checkBox
     @IBAction func checkBoxButtonAction(_ sender: Any) {
         if isChecked {
-            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE"), for: UIControlState.normal)
+            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE "), for: UIControlState.normal)
             isChecked = false
         } else {
-            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED"), for: UIControlState.normal)
+            checkBoxOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED "), for: UIControlState.normal)
             isChecked = true
         }
     }
@@ -281,10 +292,10 @@ class viewTaskViewController: UIViewController, UITextFieldDelegate, UITextViewD
     //action for the star
     @IBAction func starButtonAction(_ sender: Any) {
         if isStarred {
-            starOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected"), for: UIControlState.normal)
+            starOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected "), for: UIControlState.normal)
             isStarred = false
         } else {
-            starOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected"), for: UIControlState.normal)
+            starOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected "), for: UIControlState.normal)
             isStarred = true
             
         }

@@ -13,9 +13,9 @@
 		900451631F0DB6C60037D0D0 /* ProjectEditorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900451621F0DB6C60037D0D0 /* ProjectEditorTableViewController.swift */; };
 		900451651F0DB9680037D0D0 /* ProjectEditorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900451641F0DB9680037D0D0 /* ProjectEditorTableViewCell.swift */; };
 		900451671F0DBD1E0037D0D0 /* AddProjectEditorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 900451661F0DBD1E0037D0D0 /* AddProjectEditorTableViewCell.swift */; };
+		901009DD1FAD826100D0A26F /* AddProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 901009DC1FAD826100D0A26F /* AddProjectTableViewCell.swift */; };
 		90293FE91EFF558A00977B2D /* usedArrayInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90293FE81EFF558A00977B2D /* usedArrayInViewController.swift */; };
 		904186611EFC830800D51CC0 /* viewTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904186601EFC830800D51CC0 /* viewTaskViewController.swift */; };
-		90565C391F06EEDE009D9564 /* AddProjectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90565C381F06EEDE009D9564 /* AddProjectTableViewCell.swift */; };
 		9080915C1EFB75C000C88ED4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9080915B1EFB75C000C88ED4 /* AppDelegate.swift */; };
 		9080915E1EFB75C000C88ED4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9080915D1EFB75C000C88ED4 /* ViewController.swift */; };
 		908091611EFB75C000C88ED4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9080915F1EFB75C000C88ED4 /* Main.storyboard */; };
@@ -57,9 +57,9 @@
 		900451621F0DB6C60037D0D0 /* ProjectEditorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProjectEditorTableViewController.swift; path = "taskList-projectFile/sideBarFiles/ProjectEditorTableViewController.swift"; sourceTree = "<group>"; };
 		900451641F0DB9680037D0D0 /* ProjectEditorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProjectEditorTableViewCell.swift; path = "taskList-projectFile/sideBarFiles/ProjectEditorTableViewCell.swift"; sourceTree = "<group>"; };
 		900451661F0DBD1E0037D0D0 /* AddProjectEditorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddProjectEditorTableViewCell.swift; path = "taskList-projectFile/sideBarFiles/AddProjectEditorTableViewCell.swift"; sourceTree = "<group>"; };
+		901009DC1FAD826100D0A26F /* AddProjectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddProjectTableViewCell.swift; path = "taskList-projectFile/sideBarFiles/AddProjectTableViewCell.swift"; sourceTree = "<group>"; };
 		90293FE81EFF558A00977B2D /* usedArrayInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = usedArrayInViewController.swift; path = "taskList-projectFile/usedArrayInViewController.swift"; sourceTree = "<group>"; };
 		904186601EFC830800D51CC0 /* viewTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = viewTaskViewController.swift; path = "taskList-projectFile/manipulatingTasksFiles/viewTaskViewController.swift"; sourceTree = "<group>"; };
-		90565C381F06EEDE009D9564 /* AddProjectTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddProjectTableViewCell.swift; path = "taskList-projectFile/sideBarFiles/AddProjectTableViewCell.swift"; sourceTree = "<group>"; };
 		908091581EFB75C000C88ED4 /* taskList-projectFile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "taskList-projectFile.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9080915B1EFB75C000C88ED4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "taskList-projectFile/AppDelegate.swift"; sourceTree = "<group>"; };
 		9080915D1EFB75C000C88ED4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -133,9 +133,9 @@
 			isa = PBXGroup;
 			children = (
 				900451621F0DB6C60037D0D0 /* ProjectEditorTableViewController.swift */,
-				90B4080A1F10929000F3D134 /* EditProjectViewController.swift */,
 				900451661F0DBD1E0037D0D0 /* AddProjectEditorTableViewCell.swift */,
 				900451641F0DB9680037D0D0 /* ProjectEditorTableViewCell.swift */,
+				90B4080A1F10929000F3D134 /* EditProjectViewController.swift */,
 			);
 			name = "Project Editor";
 			path = ..;
@@ -245,7 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				9080919A1EFB9E7700C88ED4 /* sideBarTableViewController.swift */,
-				90565C381F06EEDE009D9564 /* AddProjectTableViewCell.swift */,
+				901009DC1FAD826100D0A26F /* AddProjectTableViewCell.swift */,
 				9080919C1EFB9EA400C88ED4 /* sideBarTableViewCell.swift */,
 			);
 			name = sideBarFiles;
@@ -343,18 +343,20 @@
 					908091571EFB75C000C88ED4 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 764FG2R9VZ;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					9080916E1EFB75C000C88ED4 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 764FG2R9VZ;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 908091571EFB75C000C88ED4;
 					};
 					908091791EFB75C000C88ED4 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 764FG2R9VZ;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 908091571EFB75C000C88ED4;
 					};
@@ -559,9 +561,9 @@
 				90B4080B1F10929000F3D134 /* EditProjectViewController.swift in Sources */,
 				908091931EFB975F00C88ED4 /* addTaskViewController.swift in Sources */,
 				900451631F0DB6C60037D0D0 /* ProjectEditorTableViewController.swift in Sources */,
-				90565C391F06EEDE009D9564 /* AddProjectTableViewCell.swift in Sources */,
 				90293FE91EFF558A00977B2D /* usedArrayInViewController.swift in Sources */,
 				900451671F0DBD1E0037D0D0 /* AddProjectEditorTableViewCell.swift in Sources */,
+				901009DD1FAD826100D0A26F /* AddProjectTableViewCell.swift in Sources */,
 				9080915C1EFB75C000C88ED4 /* AppDelegate.swift in Sources */,
 				904186611EFC830800D51CC0 /* viewTaskViewController.swift in Sources */,
 				9080919B1EFB9E7700C88ED4 /* sideBarTableViewController.swift in Sources */,
@@ -739,7 +741,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "taskList-projectFile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -755,7 +758,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taskList-projectFile";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "taskList-projectFile-Bridging-Header.h";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -770,7 +774,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taskList-projectFileTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/taskList-projectFile.app/taskList-projectFile";
 			};
 			name = Debug;
@@ -786,7 +791,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taskList-projectFileTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/taskList-projectFile.app/taskList-projectFile";
 			};
 			name = Release;
@@ -801,7 +807,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taskList-projectFileUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = "taskList-projectFile";
 			};
 			name = Debug;
@@ -816,7 +823,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.taskList-projectFileUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = "taskList-projectFile";
 			};
 			name = Release;

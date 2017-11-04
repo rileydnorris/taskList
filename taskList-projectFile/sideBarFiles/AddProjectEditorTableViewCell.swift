@@ -15,33 +15,34 @@ class AddProjectEditorTableViewCell: UITableViewCell {
     
     
     @IBAction func addProject(_ sender: Any) {
-        
-        //setting up coreData
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let project = Projects(context: context)
-        
-        //setting TaskData values
-        project.projectName = projectNameTextField.text!
-        project.dueDate = ""
-        project.notes = ""
-        project.remindDate = ""
-        
-        //saving to coreData
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-        
-        do {
-            projects = try context.fetch(Projects.fetchRequest())
-        } catch {
-            print("Fetch failed")
+        if projectNameTextField.text != "" {
+            //setting up coreData
+            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+            let project = Projects(context: context)
+            
+            //setting TaskData values
+            project.projectName = projectNameTextField.text!
+            project.dueDate = ""
+            project.notes = ""
+            project.remindDate = ""
+            
+            //saving to coreData
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            
+            do {
+                projects = try context.fetch(Projects.fetchRequest())
+            } catch {
+                print("Fetch failed")
+            }
+            
+            //reloading the tableView
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loadSidebar"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loadProjectEditor"), object: nil)
+            
+            projectCounts.append(0)
+            projectNameTextField.text = ""
         }
-        
-        //reloading the tableView
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "load"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loadSidebar"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "loadProjectEditor"), object: nil)
-        
-        projectCounts.append(0)
-        projectNameTextField.text = ""
     }
 
 }

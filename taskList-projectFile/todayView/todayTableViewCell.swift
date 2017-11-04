@@ -24,14 +24,14 @@ class todayTableViewCell: UITableViewCell {
     @IBAction func checkBoxAction(_ sender: Any) {
         if !usedArray[index].isChecked {
             
-            checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED"), for: UIControlState.normal)
+            checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED "), for: UIControlState.normal)
             taskClass[usedArray[index].todayItemIndex].isChecked = true
             usedArray[index].isChecked = true
             appDelegate.saveContext()
             
         } else {
             
-            checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE"), for: UIControlState.normal)
+            checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE "), for: UIControlState.normal)
             taskClass[usedArray[index].todayItemIndex].isChecked = false
             usedArray[index].isChecked = false
             appDelegate.saveContext()
@@ -45,14 +45,14 @@ class todayTableViewCell: UITableViewCell {
     @IBAction func starAction(_ sender: Any) {
         if !usedArray[index].isStarred {
             
-            starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected"), for: UIControlState.normal)
+            starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected "), for: UIControlState.normal)
             taskClass[usedArray[index].todayItemIndex].isStarred = true
             usedArray[index].isStarred = true
             appDelegate.saveContext()
             
         } else {
             
-            starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected"), for: UIControlState.normal)
+            starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected "), for: UIControlState.normal)
             taskClass[usedArray[index].todayItemIndex].isStarred = false
             usedArray[index].isStarred = false
             appDelegate.saveContext()

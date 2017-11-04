@@ -33,6 +33,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var addDateButtonOutlet: UIButton!
     @IBOutlet weak var dueDateTextField: UITextField!
     @IBOutlet weak var addTaskView: UIView!
+    @IBOutlet weak var splashTextLabel: UILabel!
     
     //variables
     var usedProjects: [String] = []
@@ -58,22 +59,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         //menu bar button item configuration
         menuBarButton.target = revealViewController()
+        menuBarButton.action = (#selector(generateAllArrays))
         menuBarButton.action = (#selector(SWRevealViewController.revealToggle(_:)))
         
         //table view customization function
         setTableViewCustomization()
         
         //gesture recognizer
-        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        
-        //generating all arrays for data purposes
-        for i in 1...projects.count+4 {
-            generateArrays(index: i)
-        }
+        //self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         //creating date picker for quick task
         createDatePicker()
-        createPickerToolbar()
+        createPickerToolbar(tool: 1)
+        createPickerToolbar(tool: 2)
         
         //editting the addTaskView
         editAddTaskView()
@@ -90,12 +88,41 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.barTintColor = UIColor.white
-        self.navigationController?.navigationBar.titleTextAttributes = [ NSFontAttributeName: UIFont(name: "Avenir Next", size: 18)!]
+        self.navigationController?.navigationBar.titleTextAttributes = [ NSAttributedStringKey.font: UIFont.systemFont(ofSize: 18, weight: .light)]
         self.navigationController?.navigationBar.tintColor = UIColor.darkGray
         self.navigationItem.title = pageTitle
     }
     
     
+    
+    @objc func generateAllArrays() {
+        //generating all arrays for data purposes
+        for i in 1...projects.count+4 {
+            generateArrays(index: i)
+        }
+    }
+    
+    
+    
+    //if there are no tasks for a project, this tells the user to enter a task
+    func setLabelsIfEmptyTable() {
+        if usedArray.count == 0 {
+            switch usedView {
+            case 1:
+                splashTextLabel.text = "You don't seem to have any tasks due today, you can add one below though!"
+            case 2:
+                splashTextLabel.text = "You don't have any tasks due this week, good job! Unless you forgot one, in which case you can add one below."
+            case 3:
+                splashTextLabel.text = "You have no tasks at all, either you have an assistant that does everything for you or you need to add one, which you can do below! (a task, not an assistant, sorry)"
+            case 4:
+                splashTextLabel.text = "You don't have any tasks in the general category, but if you need one you can add it below!"
+            default:
+                splashTextLabel.text = "You don't have any tasks in this project, why don't you add one below so the project has some friends?"
+            }
+        } else {
+            splashTextLabel.text = ""
+        }
+    }
     
     
     
@@ -116,13 +143,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func numberOfSections(in tableView: UITableView) -> Int {
         
         //some random things I want to reset everytime the tableview is reloaded
-        view.endEditing(true)
+        //view.endEditing(true)
         addTaskTextField.text = ""
         tempDate = ""
-        dueDateTextField.background = #imageLiteral(resourceName: "quickTaskDateIcon")
+        dueDateTextField.background = #imageLiteral(resourceName: "quickTaskDateIcon ")
     
         //grab corect usedArray
         generateArrays(index: usedView)
+        
+        setLabelsIfEmptyTable()
         
         return usedProjects.count
     }
@@ -194,15 +223,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
             
         if usedArray[tempCellArray[indexPath.row]].isChecked == false {
-            cell.checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE"), for: UIControlState.normal)
+            cell.checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxOUTLINE "), for: UIControlState.normal)
         } else {
-            cell.checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED"), for: UIControlState.normal)
+            cell.checkBoxButtonOutlet.setImage(#imageLiteral(resourceName: "checkBoxFILLED "), for: UIControlState.normal)
         }
             
         if usedArray[tempCellArray[indexPath.row]].isStarred == false {
-            cell.starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected"), for: UIControlState.normal)
+            cell.starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconDeselected "), for: UIControlState.normal)
         } else {
-            cell.starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected"), for: UIControlState.normal)
+            cell.starButtonOutlet.setImage(#imageLiteral(resourceName: "StarIconSelected "), for: UIControlState.normal)
         }
         
         //gathering necessary indexes for viewTaskViewController
@@ -315,6 +344,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     
+    //function to allow deleting of tasks
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
@@ -337,7 +367,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     //reload tableView function
-    func loadList(){
+    @objc func loadList(){
         getCoreData()
         tableView.reloadData()
     }
@@ -355,7 +385,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //super necessary arrays that create the usedArray based on the criteria from usedView
     func generateArrays(index: Int) {
         
-        view.endEditing(true)
         addTaskTextField.text = ""
         usedArray = [UsedArrayInViewController]()
         usedProjects = []
@@ -395,20 +424,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //WEEK |||||||||||||||||||||||||||||||||||||||||||||||||||||||||
         } else if index == 2 {
             
-            //checking for the tasks due within the next week
+            //get date seven days from now
+            var sevenDaysfromNow: NSDate {
+                return (Calendar.current as NSCalendar).date(byAdding: .day, value: 7, to: Date(), options: [])! as NSDate
+            }
+            
+            //get current date
+            let date = NSDate()
+            
+            //loop through all task objects and check if they fall within seven days
             for i in 0..<taskClass.count {
-                
-                //CHANGE THIS
-                
-                let taskDateWithoutTime = taskClass[i].taskDueDate!.components(separatedBy: ",")
-                let date = dateTime.components(separatedBy: ",")
-                let dateTime = date[0].components(separatedBy: "/")
-                let dayInt = Int(dateTime[1])!
-                
-                for x in 0...6 {
-                    let realDate = "\(dateTime[0])/\(dayInt+x)/\(dateTime[2])"
+                if taskClass[i].taskDueDateObject != nil {
                     
-                    if taskDateWithoutTime[0] == realDate {
+                    if NSDate().isBetweeen(date: date, andDate: sevenDaysfromNow) {
                         usedArray.append(UsedArrayInViewController(name: taskClass[i].taskName!, project: taskClass[i].taskProject!, section: taskClass[i].taskProjectSection, dueDate: taskClass[i].taskDueDate, notes: taskClass[i].taskNotes, remind: taskClass[i].taskIsRemind, checked: taskClass[i].isChecked, starred: taskClass[i].isStarred, itemIndex: Int(taskClass[i].todayItemIndex), sectionIndex: Int(taskClass[i].todaySectionIndex)))
                         
                         //gathering only the needed projects
@@ -419,6 +447,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                                 usedProjects.append(taskClass[i].taskProject!)
                             }
                         }
+                        
                     }
                 }
             }
@@ -488,6 +517,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             projectCounts[index-5] = usedArray.count
         }
+        
+        
+        //algorithm to sort the tasks by if they are starred
+        for i in 0..<usedArray.count {
+            if usedArray[i].isStarred {
+                let element = usedArray.remove(at: i)
+                usedArray.insert(element, at: 0)
+            }
+        }
     }
     
     
@@ -503,6 +541,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         } catch {
             print("Fetch failed")
         }
+    }
+}
+
+
+
+//function to see if a date falls within a range, for the YourWeek display
+extension NSDate {
+    func isBetweeen(date date1: NSDate, andDate date2: NSDate) -> Bool {
+        return date1.compare(self as Date).rawValue * self.compare(date2 as Date).rawValue >= 0
     }
 }
 
@@ -553,12 +600,10 @@ extension ViewController {
             
             addTaskTextField.text = ""
             tempDate = ""
-            dueDateTextField.background = #imageLiteral(resourceName: "quickTaskDateIcon")
+            dueDateTextField.background = #imageLiteral(resourceName: "quickTaskDateIcon ")
             getCoreData()
             tableView.reloadData()
         }
-        
-        view.endEditing(true)
     }
     
     
@@ -580,36 +625,55 @@ extension ViewController {
     
     
     //creating the toolbar for the picker with the done button
-    func createPickerToolbar() {
+    func createPickerToolbar(tool: Int) {
         let toolBar = UIToolbar()
         var doneButton = UIBarButtonItem()
         
         let flexButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
-        doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(addTaskViewController.dismissDateKeyboard))
-        
-        toolBar.setItems([flexButton,doneButton], animated: false)
-        toolBar.isUserInteractionEnabled = true
-        
-        toolBar.tintColor = UIColor.darkGray
-        toolBar.barTintColor = UIColor.white
-        toolBar.backgroundColor = UIColor.white
-        toolBar.sizeToFit()
-        
-        dueDateTextField.inputAccessoryView = toolBar
-        
+        if tool == 1 {
+            doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(ViewController.dismissDateKeyboard))
+            
+            toolBar.setItems([flexButton,doneButton], animated: false)
+            toolBar.isUserInteractionEnabled = true
+            toolBar.tintColor = UIColor.darkGray
+            toolBar.barTintColor = UIColor.white
+            toolBar.backgroundColor = UIColor.white
+            toolBar.sizeToFit()
+            
+            dueDateTextField.inputAccessoryView = toolBar
+            
+        } else {
+            doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(ViewController.dismissKeyboard))
+            
+            toolBar.setItems([flexButton,doneButton], animated: false)
+            toolBar.isUserInteractionEnabled = true
+            toolBar.tintColor = UIColor.darkGray
+            toolBar.barTintColor = UIColor.white
+            toolBar.backgroundColor = UIColor.white
+            toolBar.sizeToFit()
+            
+            addTaskTextField.inputAccessoryView = toolBar
+        }
+    }
+    
+    
+    
+    //function to dismiss the keyboard
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     
     
     //dimiss the date picker
-    func dismissDateKeyboard() {
+    @objc func dismissDateKeyboard() {
         view.endEditing(true)
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
         
-        dueDateTextField.background = #imageLiteral(resourceName: "thisWeekIcon")
+        dueDateTextField.background = #imageLiteral(resourceName: "thisWeekIcon ")
         tempDate = dateFormatter.string(from: datePicker.date)
     }
     
@@ -624,7 +688,7 @@ extension ViewController {
         addTaskView.layer.shadowOpacity = 0.8
         addTaskView.layer.cornerRadius = 10
         
-        let str = NSAttributedString(string: "Add a task...", attributes: [NSForegroundColorAttributeName:UIColor.white])
+        let str = NSAttributedString(string: "Add a task...", attributes: [NSAttributedStringKey.foregroundColor:UIColor.white])
         addTaskTextField.attributedPlaceholder = str
         
         addTaskButton.tintColor = UIColor.white
