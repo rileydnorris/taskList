@@ -1,5 +1,7 @@
 # TaskList
 
+**_One of my first ever projects as I was trying to teach myself programming. This is extremely outdated and full of bad code, but I'm keeping it as a nice reminder of where I've come from and a good guide to see my progress as a programmer over time._**
+
 **Project Details:**
 TaskList is a simple yet powerful todo list app for iPhone & iPad. Within a clean interface you can keep track of all your tasks for projects or just general tasks you need to complete. Some tools TaskList gives you include:
 - Add projects and project sections to organize different tasks
